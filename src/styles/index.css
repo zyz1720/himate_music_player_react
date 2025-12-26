@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+    --color-primary: #13C2C2;
+}
+
+/* 隐藏滚动条样式 */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* 歌词样式优化 */
+.lyric-item {
+    user-select: none;
+}
+
+.lyric-text {
+    line-height: 1.6;
+    color: white;
+}
+
+.trans-text {
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 高亮歌词颜色 */
+.lyric-item.text-blue-500 .lyric-text {
+    color: #3b82f6 !important;
+}
+
+/* 抽屉动画优化 */
+.lyric-drawer .ant-drawer-body {
+    padding: 0;
+}
+
+/* Drawer顶部和底部毛玻璃效果增强 */
+.lyric-drawer .ant-drawer-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+}
+
+.lyric-drawer .ant-drawer-footer {
+    background: transparent !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+}
+
+/* Drawer关闭按钮样式 */
+.lyric-drawer .ant-drawer-close {
+    color: white !important;
+}
+
+.lyric-drawer .ant-drawer-close:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 深色模式下的Drawer样式 */
+[data-theme=dark] .lyric-drawer .ant-drawer-header,
+[data-theme=dark] .lyric-drawer .ant-drawer-footer {
+    border-color: rgba(0, 0, 0, 0.3);
+}
+
+.dark .lyric-drawer .ant-drawer-header,
+.dark .lyric-drawer .ant-drawer-footer {
+    border-color: rgba(0, 0, 0, 0.3);
+}
+
+/* 毛玻璃背景效果 */
+.lyric-drawer-background {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.lyric-drawer-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.1),
+        rgba(0, 0, 0, 0.2)
+    );
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    z-index: 1;
+}
+
+.lyric-drawer-background.dark::before {
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.4)
+    );
+}
+
+/* 确保内容在毛玻璃效果之上 */
+.lyric-drawer-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* 移动端毛玻璃效果优化 */
+@media (max-width: 768px) {
+    .lyric-drawer-background::before {
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        background: linear-gradient(
+            rgba(255, 255, 255, 0.1),
+            rgba(0, 0, 0, 0.2)
+        );
+    }
+    
+    .lyric-drawer-background.dark::before {
+        background: linear-gradient(
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.4)
+        );
+    }
+}
+
+.flowing-gradient {
+    background: linear-gradient(270deg, #3b82f6, #8b5cf6, #ec4899);
+    background-size: 300% 300%;
+    animation: GradientFlow 5s ease infinite;
+}

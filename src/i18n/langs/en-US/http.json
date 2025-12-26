@@ -1,0 +1,10 @@
+{
+  "400": "Bad request parameters",
+  "401": "Authentication failed, cannot access system resources",
+  "403": "No permission for current operation",
+  "404": "Requested resource does not exist",
+  "error": "Server connection error",
+  "timeout": "Request timeout",
+  "code": "System interface {{code}} exception",
+  "default": "System unknown error, please contact administrator"
+}
