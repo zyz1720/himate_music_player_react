@@ -1,3 +1,5 @@
+<a href="./README.EN.md" >English</a> | <a href="./README.md" >简体中文</a>
+
 # Himate Music Player
 
 一个基于 React 开发的现代化音乐播放器，具有完整的音乐播放、歌单、搜索和多语言支持功能。
