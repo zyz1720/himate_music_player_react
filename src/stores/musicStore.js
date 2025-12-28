@@ -28,9 +28,6 @@ export const useMusicStore = create((set) => ({
     if (!music || isEmptyObject(music)) {
       return set({ playingMusic: {} });
     }
-    if (typeof music?.id === 'string') {
-      return set({ playingMusic: music });
-    }
     getMusicDetail(music?.id).then((res) => {
       if (res.code === 0) {
         set({ playingMusic: res.data || {} });
@@ -41,6 +38,13 @@ export const useMusicStore = create((set) => ({
             lyrics,
             isHasTrans: haveTrans,
             isHasYrc: haveYrc,
+          });
+        } else {
+          set({
+            lyrics: [],
+            nowLyricIndex: -1,
+            isHasTrans: false,
+            isHasYrc: false,
           });
         }
       }
@@ -116,6 +120,6 @@ export const useMusicStore = create((set) => ({
       };
       return newState;
     }),
-  resetPlayingMusic: () => set(defaultPlayingMusicState),
+  resetPlayingMusic: () => set({ ...defaultPlayingMusicState }),
   setMusicPlayMode: (mode) => set({ musicPlayMode: mode || 'order' }),
 }));

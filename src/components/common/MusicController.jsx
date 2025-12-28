@@ -235,8 +235,8 @@ function MusicController() {
   // 渲染歌词行
   const renderLyricItem = (item, index) => {
     const isActive = nowLyricIndex === index;
-    const isVisible = !['//', '本翻译作品'].some(
-      (hidden) => item?.lyric?.includes(hidden) || item?.text?.includes(hidden),
+    const isVisible = !['//', '本翻译作品'].some((hidden) =>
+      item?.trans?.includes(hidden),
     );
 
     return (
@@ -251,7 +251,6 @@ function MusicController() {
               : 'text-white text-base'
           }
           ${Math.abs(nowLyricIndex - index) <= 2 ? 'opacity-80' : 'opacity-30'}
-          ${isVisible ? '' : 'hidden'}
         `}
       >
         <div className="lyric-text">{item?.lyric || ''}</div>
