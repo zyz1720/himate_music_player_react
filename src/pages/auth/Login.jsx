@@ -1,4 +1,4 @@
-import { message, QRCode, Button, Typography, Card } from 'antd';
+import { message, QRCode } from 'antd';
 import { useState, useEffect, useRef } from 'react';
 import { useUserStore } from '@/stores/userStore';
 import { getLoginQrCode, getLoginStatus } from '@/api/login';
@@ -6,8 +6,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ReloadOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-
-const { Title, Text } = Typography;
+import Aurora from '@/components/bits/Aurora';
 
 function Login() {
   const navigate = useNavigate();
@@ -94,42 +93,56 @@ function Login() {
   }, []);
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-blue-200">
-      <Card className="w-78 p-8">
-        {/* 标题和Logo */}
-        <div className="text-center mb-2">
-          <img src={'./logo.png'} alt="Logo" className="h-20 mx-auto mb-4" />
-          <Title level={3}>{t('login.title')}</Title>
+    <div className="w-full h-screen flex items-center justify-center bg-black">
+      <div className="w-full h-full relative">
+        <Aurora colorStops={['#3b82f6', '#7cff67', '#5227FF']} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-78 p-8 bg-white/5 rounded-2xl z-10 backdrop-blur-[10px] border border-white/10">
+          {/* 标题和Logo */}
+          <div className="text-center mb-2">
+            <img
+              src={'./logo.png'}
+              alt="Logo"
+              className="h-20 mx-auto mb-4 rounded-2xl"
+            />
+            <h3 className="text-xl text-white font-bold mb-2">
+              {t('login.title')}
+            </h3>
+          </div>
+
+          {/* 二维码登录区域 */}
+          <div className="text-center">
+            <span className="block text-white font-bold mb-4">
+              {t('login.scanQRCode')}
+            </span>
+
+            {qrCodeId && !qrCodeExpired ? (
+              <div className="justify-center items-center flex">
+                <QRCode value={qrCodeId} bgColor="#F0F0F0" />
+              </div>
+            ) : null}
+
+            {qrCodeExpired ? (
+              <>
+                <span className="block text-xs text-yellow-600 mb-4">
+                  {t('login.qrCodeExpired')}
+                </span>
+                <div className="flex justify-center items-center">
+                  <button
+                    className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    onClick={() => getLoginQrCodeHandler()}
+                    disabled={isPolling && !qrCodeExpired}
+                  >
+                    <span className="text-sm">
+                      <ReloadOutlined className="mr-2" />{' '}
+                      {t('login.refreshQrCode')}
+                    </span>
+                  </button>
+                </div>
+              </>
+            ) : null}
+          </div>
         </div>
-
-        {/* 二维码登录区域 */}
-        <div className="text-center">
-          <Text strong className="block mb-4">
-            {t('login.scanQRCode')}
-          </Text>
-
-          {qrCodeId && !qrCodeExpired ? (
-            <div className="justify-center items-center flex">
-              <QRCode value={qrCodeId} />
-            </div>
-          ) : null}
-
-          {qrCodeExpired ? (
-            <>
-              <Text type="warning" className="block mb-4">
-                {t('login.qrCodeExpired')}
-              </Text>
-              <Button
-                icon={<ReloadOutlined />}
-                onClick={() => getLoginQrCodeHandler()}
-                disabled={isPolling && !qrCodeExpired}
-              >
-                {t('login.refreshQrCode')}
-              </Button>
-            </>
-          ) : null}
-        </div>
-      </Card>
+      </div>
     </div>
   );
 }

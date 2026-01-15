@@ -2,11 +2,19 @@ import { getMusicDetail } from '@/api/music';
 import { create } from 'zustand';
 import { isEmptyObject } from '@/utils/common/object_util';
 import { formatLrc } from '@/utils/common/lyric_util';
+import {
+  getDominantColor,
+  isColorCloseToWhite,
+} from '@/utils/common/color_util';
+
+const THUMBNAIL_URL = import.meta.env.VITE_THUMBNAIL_URL;
 
 const defaultState = {
   playingMusic: {}, // 当前播放音乐
   playList: [], // 播放列表
   musicPlayMode: 'order', // 播放模式
+  coverMainColor: [1, 1, 1], // 封面主颜色
+  coverIsCloseToWhite: false, // 封面是否接近白色
 };
 
 const defaultPlayingMusicState = {
@@ -39,6 +47,14 @@ export const useMusicStore = create((set) => ({
             isHasTrans: haveTrans,
             isHasYrc: haveYrc,
           });
+          getDominantColor(THUMBNAIL_URL + musicExtra.music_cover).then(
+            (color) => {
+              set({ coverMainColor: color || [1, 1, 1] });
+              set({
+                coverIsCloseToWhite: isColorCloseToWhite(color),
+              });
+            },
+          );
         } else {
           set({
             lyrics: [],

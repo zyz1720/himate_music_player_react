@@ -1,4 +1,4 @@
-import { Table, Typography, Button, Spin, Empty, message } from 'antd';
+import { Typography, Spin, Empty, message } from 'antd';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { PlayCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -6,6 +6,7 @@ import { getFavoritesDetail, getMusicFromFavorites } from '@/api/music';
 import { useMusicStore } from '@/stores/musicStore';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
+import CustomTable from '@/components/common/CustomTable';
 
 const { Title, Text } = Typography;
 const STATIC_URL = import.meta.env.VITE_STATIC_URL;
@@ -72,38 +73,13 @@ function PlaylistDetail() {
     }
   };
 
-  // 无限滚动 - 使用 Intersection Observer API
-  useEffect(() => {
-    if (!hasMore || loading) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          loadMusicList();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const target = document.getElementById('infinite-scroll-trigger');
-    if (target) {
-      observer.observe(target);
-    }
-
-    return () => {
-      if (target) {
-        observer.unobserve(target);
-      }
-    };
-  }, [hasMore, loading, musicList.length]);
-
   useEffect(() => {
     loadPlaylistDetail();
     loadMusicList(true);
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20">
+    <div className="min-h-screen pb-20">
       {/* 歌单详情 */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         {loading && !playDetails ? (
@@ -124,28 +100,35 @@ function PlaylistDetail() {
                 }
               />
               <div className="ml-4">
-                <Title level={4}>{playDetails.favorites_name}</Title>
-                <Text type="secondary">
+                <Title style={{ color: 'white' }} level={4}>
+                  {playDetails.favorites_name}
+                </Title>
+                <Text type="secondary" style={{ color: 'white' }}>
                   {playDetails.favorites_remarks || t('music.noDescription')}
                 </Text>
-                <div className="playDetails-stats mt-4">
-                  <Text>
+                <div className="mt-4 flex items-center">
+                  <Text style={{ color: 'white' }}>
                     {total} {t('music.trackCount')}
                   </Text>
-                  <Text type="secondary" className="mx-4">
+                  <Text
+                    type="secondary"
+                    className="mx-4"
+                    style={{ color: 'white' }}
+                  >
                     {t('music.createTime')}{' '}
                     {dayjs(playDetails.create_time).format('YYYY/MM/DD')}{' '}
                   </Text>
-                  <Button
-                    icon={<PlayCircleOutlined />}
+                  <button
+                    className="flex items-center justify-center gap-2 px-4 py-2 border border-white hover:border-blue-600 hover:text-blue-600 text-white rounded-lg transition-colors"
                     onClick={() => {
                       setPlayList(musicList);
                       setPlayingMusic(musicList[0]);
                       message.success(t('music.add_success'));
                     }}
                   >
-                    {t('music.playAll')}
-                  </Button>
+                    <PlayCircleOutlined />
+                    <span className="text-xs">{t('music.playAll')}</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -153,102 +136,91 @@ function PlaylistDetail() {
             {/* 歌曲列表 */}
             <div className="mt-4">
               {musicList.length > 0 ? (
-                <>
-                  <Table
-                    columns={[
-                      {
-                        title: t('music.number'),
-                        width: 60,
-                        render: (_, __, index) => index + 1,
-                      },
-                      {
-                        title: t('music.songName'),
-                        dataIndex: 'title',
-                        width: 320,
-                        key: 'title',
-                      },
-                      {
-                        title: t('music.artist'),
-                        dataIndex: 'artist',
-                        width: 320,
-                        key: 'artist',
-                        render: (artist) => (
-                          <div className="text-xs text-gray-500 line-clamp-1">
-                            {artist}
-                          </div>
-                        ),
-                      },
-                      {
-                        title: t('music.album'),
-                        dataIndex: 'album',
-                        width: 320,
-                        key: 'album',
-                        render: (album) => (
-                          <div className="text-xs text-gray-500 line-clamp-1">
-                            {album || t('music.unknownAlbum')}
-                          </div>
-                        ),
-                      },
-                      {
-                        title: t('music.operation'),
-                        width: 120,
-                        fixed: 'right',
-                        key: 'operation',
-                        render: (_, record) => (
-                          <div className="space-x-4">
-                            <Button
-                              type="text"
-                              icon={
-                                <PlusCircleOutlined
-                                  style={{ fontSize: '20px', color: '#bfbfbf' }}
-                                />
-                              }
-                              iconPlacement="start"
-                              shape="circle"
-                              onClick={() => {
-                                addPlayList([record]);
-                                message.success(t('music.add_success'));
-                              }}
-                            />
-                            <Button
-                              type="text"
-                              icon={
-                                <PlayCircleOutlined
-                                  style={{ fontSize: '20px', color: '#bfbfbf' }}
-                                />
-                              }
-                              iconPlacement="start"
-                              shape="circle"
-                              onClick={() => {
-                                setPlayingMusic(record);
-                                addPlayList([record]);
-                              }}
+                <div className='h-[calc(100vh-280px)]'>
+                <CustomTable
+                  columns={[
+                    {
+                      title: t('music.number'),
+                      width: 60,
+                      render: (_, __, index) => (
+                        <span style={{ color: '#ffffff' }}>{index + 1}</span>
+                      ),
+                    },
+                    {
+                      title: t('music.songName'),
+                      dataIndex: 'title',
+                      width: 320,
+                      key: 'title',
+                      render: (title) => (
+                        <span style={{ color: '#ffffff' }}>{title}</span>
+                      ),
+                    },
+                    {
+                      title: t('music.artist'),
+                      dataIndex: 'artist',
+                      width: 320,
+                      key: 'artist',
+                      render: (artist) => (
+                        <div className="text-xs text-white line-clamp-1">
+                          {artist}
+                        </div>
+                      ),
+                    },
+                    {
+                      title: t('music.album'),
+                      dataIndex: 'album',
+                      width: 320,
+                      key: 'album',
+                      render: (album) => (
+                        <div className="text-xs text-white line-clamp-1">
+                          {album || t('music.unknownAlbum')}
+                        </div>
+                      ),
+                    },
+                    {
+                      title: t('music.operation'),
+                      width: 120,
+                      key: 'operation',
+                      render: (_, record) => (
+                        <div className="space-x-4 flex items-center">
+                          <div
+                            className="cursor-pointer flex items-center justify-center p-2 hover:bg-black/10 rounded-full"
+                            onClick={() => {
+                              setPlayingMusic(record);
+                              addPlayList([record]);
+                            }}
+                          >
+                            <PlayCircleOutlined
+                              style={{ fontSize: '20px', color: '#ffffff' }}
                             />
                           </div>
-                        ),
-                      },
-                    ]}
-                    dataSource={musicList}
-                    rowKey="id"
-                    pagination={false} // 禁用分页
-                    rowClassName={(record) =>
-                      record.id === playingMusic?.id ? 'bg-blue-50' : ''
-                    }
-                    className="music-table"
-                  />
-                  {/* 无限滚动触发元素 */}
-                  {hasMore && (
-                    <div
-                      id="infinite-scroll-trigger"
-                      className="flex justify-center items-center py-4"
-                    >
-                      <Spin size="small" />
-                      <span className="ml-2 text-sm text-gray-500">
-                        {t('music.loading')}
-                      </span>
-                    </div>
-                  )}
-                </>
+                          <div
+                            className="cursor-pointer flex items-center justify-center p-2 hover:bg-black/10 rounded-full"
+                            onClick={() => {
+                              addPlayList([record]);
+                              message.success(t('music.add_success'));
+                            }}
+                          >
+                            <PlusCircleOutlined
+                              style={{ fontSize: '20px', color: '#ffffff' }}
+                            />
+                          </div>
+                        </div>
+                      ),
+                    },
+                  ]}
+                  dataSource={musicList}
+                  rowKey="id"
+                  rowClassName={(record) =>
+                    record.id === playingMusic?.id
+                      ? 'bg-white/5 backdrop-blur-[10px] border border-white/10'
+                      : ''
+                  }
+                  hasMore={hasMore}
+                  loading={loading}
+                  onLoadMore={loadMusicList}
+                />
+                </div>
               ) : (
                 <Empty description={t('music.noMusicInPlaylist')} />
               )}

@@ -1,11 +1,4 @@
-import {
-  HashRouter,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-  Outlet,
-} from 'react-router';
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useUserStore } from '@/stores/userStore';
 import { dayjsLocaleMap } from '@/constants/locale';

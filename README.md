@@ -106,7 +106,6 @@ src/
 ├── components/            # 可复用组件
 │   └── common/            # 通用组件
 ├── constants/             # 常量定义
-│   ├── database_enum.js   # 数据库枚举
 │   └── locale.js          # 本地化常量
 ├── i18n/                  # 国际化配置
 │   └── langs/             # 语言包

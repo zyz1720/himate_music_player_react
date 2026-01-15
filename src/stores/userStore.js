@@ -31,6 +31,29 @@ const store = (set, get) => ({
   },
   refreshUserToken: async () => {
     try {
+      const waitForRefreshToken = () => {
+        return new Promise((resolve, reject) => {
+          if (get().refreshToken) {
+            resolve();
+            return;
+          }
+
+          const interval = setInterval(() => {
+            if (get().refreshToken) {
+              clearInterval(interval);
+              resolve();
+            }
+          }, 100);
+
+          setTimeout(() => {
+            clearInterval(interval);
+            reject(new Error('refreshToken timeout'));
+          }, 5000);
+        });
+      };
+
+      await waitForRefreshToken();
+
       const response = await refreshToken({
         refresh_token: get().refreshToken,
       });

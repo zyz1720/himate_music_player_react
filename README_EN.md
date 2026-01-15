@@ -105,7 +105,6 @@ src/
 ├── components/            # Reusable components
 │   └── common/            # Common components
 ├── constants/             # Constants definition
-│   ├── database_enum.js   # Database enums
 │   └── locale.js          # Localization constants
 ├── i18n/                  # Internationalization configuration
 │   └── langs/             # Language packages
