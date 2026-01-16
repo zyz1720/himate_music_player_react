@@ -372,13 +372,13 @@ function MusicController() {
         </div>
       </div>
       {/* 音乐播放控制器 */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4">
+      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4 max-md:px-4">
         <div className="max-w-7xl mx-auto rounded-full backdrop-blur-[10px] border border-white/10 p-2 px-4">
           {/* 控制区域 */}
           <div className="grid grid-cols-3 items-center">
             {/* 左侧：歌曲信息 */}
             <div
-              className="col-span-1 flex items-center space-x-3 cursor-pointer hidden md:flex"
+              className="col-span-1 flex items-center space-x-3 cursor-pointer"
               onClick={() => setIsLyricDrawerOpen(true)}
             >
               <div className="relative flex items-center justify-center">
@@ -408,7 +408,7 @@ function MusicController() {
                   </div>
                 </div>
               </div>
-              <div className="music-info max-w-xs">
+              <div className="max-w-xs">
                 <div className="music-title text-sm text-white font-medium truncate">
                   {playingMusic?.title || t('music.currentPlaying')}
                 </div>
@@ -586,70 +586,77 @@ function MusicController() {
                         <span>{durationFormatted}</span>
                       </div>
                     </div>
+                  </div>
+                  {/* 播放控制 - 固定在底部 */}
+                  <div className="pb-6 col-span-1 flex items-center justify-center space-x-8">
+                    {/* 播放模式切换 */}
+                    <Tooltip title={t(`music.${musicPlayMode}_play`)}>
+                      <Button
+                        type="text"
+                        icon={
+                          <SyncOutlined
+                            style={{ fontSize: '22px', color: 'white' }}
+                          />
+                        }
+                        onClick={togglePlayMode}
+                        size="large"
+                      />
+                    </Tooltip>
 
-                    {/* 播放控制 - 固定在底部 */}
-                    <div className="col-span-1 flex items-center justify-center space-x-8">
-                      {/* 播放模式切换 */}
-                      <Tooltip title={t(`music.${musicPlayMode}_play`)}>
-                        <Button
-                          type="text"
-                          icon={<SyncOutlined style={{ fontSize: '22px', color: 'white' }} />}
-                          onClick={togglePlayMode}
-                          size="large"
+                    {/* 上一首 */}
+                    <Button
+                      type="text"
+                      icon={
+                        <StepBackwardOutlined
+                          style={{ fontSize: '28px', color: 'white' }}
                         />
-                      </Tooltip>
+                      }
+                      onClick={previousTrack}
+                      size="large"
+                    />
 
-                      {/* 上一首 */}
-                      <Button
-                        type="text"
-                        icon={
-                          <StepBackwardOutlined
-                            style={{ fontSize: '28px', color: 'white' }}
+                    {/* 播放/暂停 */}
+                    <Button
+                      type="text"
+                      size="large"
+                      icon={
+                        isMusicPlaying ? (
+                          <PauseCircleOutlined
+                            style={{ fontSize: '32px', color: 'white' }}
                           />
-                        }
-                        onClick={previousTrack}
-                        size="large"
-                      />
-
-                      {/* 播放/暂停 */}
-                      <Button
-                        type="text"
-                        size="large"
-                        icon={
-                          isMusicPlaying ? (
-                            <PauseCircleOutlined
-                              style={{ fontSize: '32px', color: 'white' }}
-                            />
-                          ) : (
-                            <PlayCircleOutlined
-                              style={{ fontSize: '32px', color: 'white' }}
-                            />
-                          )
-                        }
-                        onClick={playOrPause}
-                        loading={isMusicLoading}
-                      />
-
-                      {/* 下一首 */}
-                      <Button
-                        type="text"
-                        icon={
-                          <StepForwardOutlined
-                            style={{ fontSize: '28px', color: 'white' }}
+                        ) : (
+                          <PlayCircleOutlined
+                            style={{ fontSize: '32px', color: 'white' }}
                           />
-                        }
-                        onClick={nextTrack}
-                        size="large"
-                      />
+                        )
+                      }
+                      onClick={playOrPause}
+                      loading={isMusicLoading}
+                    />
 
-                      {/* 等待播放 */}
-                      <Button
-                        type="text"
-                        icon={<MenuOutlined style={{ fontSize: '22px', color: 'white' }} />}
-                        onClick={() => setIsPlaylistDrawerOpen(true)}
-                        size="large"
-                      />
-                    </div>
+                    {/* 下一首 */}
+                    <Button
+                      type="text"
+                      icon={
+                        <StepForwardOutlined
+                          style={{ fontSize: '28px', color: 'white' }}
+                        />
+                      }
+                      onClick={nextTrack}
+                      size="large"
+                    />
+
+                    {/* 等待播放 */}
+                    <Button
+                      type="text"
+                      icon={
+                        <MenuOutlined
+                          style={{ fontSize: '22px', color: 'white' }}
+                        />
+                      }
+                      onClick={() => setIsPlaylistDrawerOpen(true)}
+                      size="large"
+                    />
                   </div>
                 </div>
 
@@ -687,20 +694,30 @@ function MusicController() {
                 {/* 移动端视图切换按钮 */}
                 <div className="absolute top-4 right-4 z-20 flex space-x-2">
                   <Button
-                    type={currentView === 'music' ? 'primary' : 'default'}
+                    type={'text'}
                     size="small"
                     onClick={() => setCurrentView('music')}
-                    className="backdrop-blur-sm"
                   >
-                    {t('music.music_tab')}
+                    <span
+                      className={
+                        currentView === 'music' ? 'text-primary' : 'text-white'
+                      }
+                    >
+                      {t('music.music_tab')}
+                    </span>
                   </Button>
                   <Button
-                    type={currentView === 'lyrics' ? 'primary' : 'default'}
+                    type={'text'}
                     size="small"
                     onClick={() => setCurrentView('lyrics')}
-                    className="backdrop-blur-sm"
                   >
-                    {t('music.lyrics_tab')}
+                    <span
+                      className={
+                        currentView === 'lyrics' ? 'text-primary' : 'text-white'
+                      }
+                    >
+                      {t('music.lyrics_tab')}
+                    </span>
                   </Button>
                 </div>
 

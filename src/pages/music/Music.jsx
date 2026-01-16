@@ -207,7 +207,7 @@ function Music() {
         {/* 歌单列表滚动区域 */}
         <motion.div
           ref={scrollContainerRef}
-          className="h-[calc(100vh-225px)] overflow-y-auto overflow-x-hidden px-4 pb-10 scrollbar-hide"
+          className="h-[calc(100vh-230px)] overflow-y-auto overflow-x-hidden px-4 pb-10 scrollbar-hide"
           key={activeTab}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

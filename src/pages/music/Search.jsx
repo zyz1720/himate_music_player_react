@@ -1,4 +1,4 @@
-import { Input, Button, Empty, Spin, message } from 'antd';
+import { Empty, Spin, message } from 'antd';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import {
@@ -11,8 +11,6 @@ import { getMusic } from '@/api/music';
 import { useTranslation } from 'react-i18next';
 import { useMusicStore } from '@/stores/musicStore';
 import CustomTable from '@/components/common/CustomTable';
-
-const { Search } = Input;
 
 function SearchPage() {
   const location = useLocation();
@@ -91,7 +89,7 @@ function SearchPage() {
   return (
     <div className="">
       {/* 搜索框 - 固定在顶部 */}
-      <div className="sticky top-0 z-10 pt-4">
+      <div className="sticky top-0 z-10 pt-4 max-md:px-4">
         <div className="max-w-xl mx-auto relative">
           <input
             type="text"
@@ -121,7 +119,7 @@ function SearchPage() {
       {/* 搜索结果 - 可滚动区域 */}
       <div className="max-w-7xl mx-auto px-4 min-h-[calc(100vh-80px)] pb-20">
         {searchResults.length > 0 && (
-          <div className="mb-4">
+          <div className="mb-4 max-md:mt-4">
             <button
               className="flex items-center justify-center gap-2 px-4 py-2 border border-white hover:border-blue-600 hover:text-blue-600 text-white rounded-lg transition-colors"
               onClick={() => {
@@ -141,7 +139,7 @@ function SearchPage() {
             <Spin size="large" />
           </div>
         ) : searchResults.length > 0 ? (
-          <div className='h-[calc(100vh-210px)]'>
+          <div className="h-[calc(100vh-210px)]">
             <CustomTable
               columns={[
                 {
